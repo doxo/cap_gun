@@ -32,8 +32,15 @@ module CapGun
     end
 
     def deployed_to
-      return "deployed to #{capistrano[:rails_env]}" if capistrano[:rails_env]
-      "deployed"
+      "deployed%r".sub('%r') {
+        if capistrano[:stage]
+          " to #{capistrano[:stage]}"
+        elsif capistrano[:rails_env]
+          " to #{capistrano[:rails_env]}"
+        else
+          ""
+        end
+      }
     end
 
     def branch
@@ -134,7 +141,6 @@ Previous Release Revision: #{previous_revision}
 
 Repository: #{capistrano[:repository]}
 Deploy path: #{capistrano[:deploy_to]}
-Domain: #{capistrano[:domain]}
 #{scm_details}
 EOL
     end
