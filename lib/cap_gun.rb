@@ -71,22 +71,3 @@ module CapGun
     end
     
 end
-
-if Object.const_defined?("Capistrano")
-
-  Capistrano::Configuration.instance(:must_exist).load do
-
-    namespace :cap_gun do
-      desc "Send notification of the current release and the previous release via email."
-      task :email, :roles => :app do
-        CapGun::Mailer.load_mailer_config(self)
-        if CapGun::Mailer.respond_to?(:deployment_notification)
-          CapGun::Mailer.deployment_notification(self).deliver
-        else
-          CapGun::Mailer.deliver_deployment_notification(self)          
-        end
-      end
-    end
-    
-  end
-end
