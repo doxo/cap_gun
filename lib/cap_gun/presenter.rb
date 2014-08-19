@@ -4,9 +4,9 @@ module CapGun
   class Presenter
     DEFAULT_SENDER = %("CapGun" <cap_gun@example.com>)
     DEFAULT_EMAIL_PREFIX = "[DEPLOY]"
-    
+
     attr_accessor :capistrano
-    
+
     def initialize(capistrano)
       self.capistrano = capistrano
     end
@@ -22,7 +22,7 @@ module CapGun
     def from
       capistrano[:cap_gun_email_envelope][:from] || DEFAULT_SENDER
     end
-    
+
     def current_user
       Etc.getlogin
     end
@@ -64,7 +64,7 @@ module CapGun
     def scm_log_messages
       messages = case capistrano[:scm].to_sym
         when :git
-          `git log #{previous_revision}..#{capistrano[:current_revision]} --pretty=format:%h:%s`
+          `git log #{previous_revision}..#{capistrano[:current_revision]} --pretty=format:%h\ %ci\ \(%an\)\ :\ %s`
         when :subversion
           `svn log -r #{previous_revision.to_i+1}:#{capistrano[:current_revision]}`
         else
@@ -87,40 +87,40 @@ module CapGun
       local = convert_from_utc(match[1])
       local.strftime("%B #{local.day.ordinalize}, %Y %l:%M %p #{local_timezone}").gsub(/\s+/, ' ').strip
     end
-    
+
     # Use some DateTime magicrey to convert UTC to the current time zone
     # When the whole world is on Rails 2.1 (and therefore new ActiveSupport) we can use the magic timezone support there.
     def convert_from_utc(timestamp)
       # we know Capistrano release timestamps are UTC, but Ruby doesn't, so make it explicit
-      utc_time = timestamp << "UTC" 
+      utc_time = timestamp << "UTC"
       datetime = DateTime.parse(utc_time)
       datetime.new_offset(local_datetime_zone_offset)
     end
-    
+
     def local_datetime_zone_offset
       @local_datetime_zone_offset ||= DateTime.now.offset
     end
-    
+
     def local_timezone
       @current_timezone ||= Time.now.zone
     end
-    
+
     def release_time
       humanize_release_time(capistrano[:current_release])
     end
-    
+
     def previous_revision
       capistrano.fetch(:previous_revision, "n/a")
     end
-    
-    def previous_release_time 
+
+    def previous_release_time
       humanize_release_time(capistrano[:previous_release])
     end
 
     def subject
       "#{email_prefix} #{capistrano[:application]} #{deployed_to}"
     end
-    
+
     def comment
       "Comment: #{capistrano[:comment]}.\n" if capistrano[:comment]
     end

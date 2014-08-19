@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{cap_gun}
-  s.version = "0.2.4.doxorc2"
+  s.version = "0.2.5.doxo"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Rob Sanheim", "Muness Alrubaie", "Relevance"]
-  s.date = %q{2010-05-28}
+  s.date = %q{2014-08-18}
   s.description = %q{Super simple capistrano deployment notifications.}
   s.email = %q{opensource@thinkrelevance.com}
   s.extra_rdoc_files = [
