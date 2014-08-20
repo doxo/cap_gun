@@ -64,7 +64,7 @@ module CapGun
     def scm_log_messages
       messages = case capistrano[:scm].to_sym
         when :git
-          `git log #{previous_revision}..#{capistrano[:current_revision]} --pretty=format:%h\ %ci\ \(%an\)\ :\ %s`
+          `git log #{previous_revision}..#{capistrano[:current_revision]} --pretty=format:%h\ %ci,\ \ %an:\ \ %s`
         when :subversion
           `svn log -r #{previous_revision.to_i+1}:#{capistrano[:current_revision]}`
         else
