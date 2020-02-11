@@ -24,7 +24,7 @@ module CapGun
     end
 
     def current_user
-      Etc.getlogin
+      ENV["LC_BUILD_USER_ID"].nil? ? Etc.getlogin : ENV["LC_BUILD_USER_ID"]
     end
 
     def summary
