@@ -24,7 +24,7 @@ module CapGun
     end
 
     def current_user
-      Etc.getlogin
+      ENV.fetch("BUILD_USER_ID", Etc.getlogin)
     end
 
     def summary
